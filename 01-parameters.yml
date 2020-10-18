@@ -2,14 +2,19 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: "First parameter example on CFN"
 
+Parameters:
+  FirstKey:
+    Description: My First valid key
+    Type: "AWS::EC2::KeyPair::KeyName"
+
 Resources:
   sundayvm01:
     Type: "AWS::EC2::Instance"
     Properties:
       ImageId: ami-0947d2ba12ee1ff75
       InstanceType: t2.micro
-      KeyName: cfn-key-1
-      SecurityGroup:
+      KeyName: !Ref FirstKey
+      SecurityGroups:
         - default
         - !Ref customsecgroup
   customsecgroup:
