@@ -1,0 +1,23 @@
+# date 18-10-2020
+AWSTemplateFormatVersion: 2010-09-09
+Description: "First parameter example on CFN"
+
+Resources:
+  sundayvm01:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      ImageId: ami-0947d2ba12ee1ff75
+      InstanceType: t2.micro
+      KeyName: cfn-key-1
+      SecurityGroup:
+        - default
+        - !Ref customsecgroup
+  customsecgroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: "Custom security group for ssh access"
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          CidrIp: 0.0.0.0/0
+          FromPort: 22
+          ToPort: 22
