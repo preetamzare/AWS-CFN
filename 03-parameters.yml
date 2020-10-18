@@ -1,0 +1,43 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: "This is another example to parameterised the string"
+
+Parameters:
+  myfirstkey:
+    Description: "my first Key"
+    Type: AWS::EC2::KeyPair::KeyName
+  myaz:
+    Description: "Select the AZ of your choice"
+    Type: String
+    Default: us-east-1a
+    AllowedValues:
+      - us-east-1b
+      - us-east-1c
+      - us-east-1a
+  myinstance:
+    Description: "choose the instance type of your choice"
+    Type: String
+    Default: t2.small
+    AllowedValues:
+      - t2.micro
+      - t2.small
+
+Resources:
+  sundayvm01:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref myinstance
+      ImageId: ami-0947d2ba12ee1ff75
+      KeyName: !Ref myfirstkey
+      SecurityGroups:
+        - default
+        - !Ref customsecgroup
+      AvailabilityZone: !Ref myaz
+  customsecgroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Custom group for SSH group"
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0

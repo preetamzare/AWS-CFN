@@ -1,0 +1,36 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: "Second example of parameters"
+
+Parameters:
+  myfirstkey:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: My first Key
+  myaz:
+    Type: String
+    Description: Enter the required AZ
+    Default: us-east-1a
+    AllowedValues:
+      - us-east-1a
+      - us-east-1b
+      - us-east-1c
+
+Resources:
+  sundayvm01:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0947d2ba12ee1ff75
+      InstanceType: t2.micro
+      KeyName: !Ref myfirstkey
+      SecurityGroups:
+        - default
+        - !Ref customsecgroup
+      AvailabilityZone: !Ref myaz
+  customsecgroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Custom security group for SSH access
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
