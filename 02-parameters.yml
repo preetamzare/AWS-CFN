@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 AWSTemplateFormatVersion: 2010-09-09
 Description: "Second example of parameters"
 
@@ -29,8 +30,37 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: Custom security group for SSH access
+=======
+# copy of of 01-parameters.yml
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  MyKeyName:
+    Type: AWS::EC2::Keypair::KeyName
+    Description: Your first key to access AWS Resources
+
+Resources:
+  myfirstvm:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.micro
+      ImageId: ami-0cd3dfa4e37921605
+      KeyName: !Ref MyKeyName
+      SecurityGroups:
+        - default
+        - !Ref customsecuritygroup
+  customsecuritygroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Custom security group to allow SSH"
+>>>>>>> 8fa8b9daf0378b82c729a59be7e1f99e8a7b09af
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 22
           ToPort: 22
           CidrIp: 0.0.0.0/0
+<<<<<<< HEAD
+=======
+# we need to remember how security groups are mentioned in yaml format.
+
+
+>>>>>>> 8fa8b9daf0378b82c729a59be7e1f99e8a7b09af
