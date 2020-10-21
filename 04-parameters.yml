@@ -1,0 +1,49 @@
+# 21-10-2020
+AWSTemplateFormatVersion: 2010-09-09
+Description: "we will use string type for Availability zone"
+
+Parameters:
+  mykey:
+    Description: "Key for general purpose"
+    Type: AWS::EC2::KeyPair::KeyName
+
+  myazchoices:
+    Description: choice of availability zone
+    Type: String
+    Default: us-east-1a
+    AllowedValues:
+    - us-east-1a
+    - us-east-1b
+    - us-east-1c
+
+  MyInstance:
+    Description: "Select the instance you want"
+    Type: String
+    Default: t2.small
+    AllowedValues:
+    - t2.micro
+    - t2.small
+
+Resources:
+  MyVM09:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref MyInstance
+      ImageId: ami-0947d2ba12ee1ff75
+      KeyName: !Ref mykey
+      SecurityGroups:
+       - default
+       - !Ref customsecgroup
+      AvailabilityZone: !Ref myazchoices
+  customsecgroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Custom security groups"
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          CidrIp: 0.0.0.0/0
+          FromPort: 22
+          ToPort: 22   
+        
+
+
