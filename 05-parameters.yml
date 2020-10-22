@@ -1,19 +1,39 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: |
-  
+Description: "This is example of SSM parameter store"
+
 Parameters:
-  
-Metadata:
-  
-Mappings:
-  
-Conditions:
-  
+  mykey:
+    Description: "Key to use"
+    Type: AWS::EC2::KeyPair::KeyName
+  myaz:
+    Description: "Provide the availability zone"
+    Type: String
+    Default: us-east-1c
+    AllowedValues:
+      - us-east-1a
+      - us-east-1b
+      - us-east-1c
+  myinstance:
+    Description: "value will be pulled from SSM Store"
+    Type: AWS::SSM::Parameter::Value<String>
+
 Resources:
-  
-Transform:
-  
-Outputs:
-
-
-
+  myvm:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0947d2ba12ee1ff75
+      InstanceType: !Ref myinstance
+      KeyName: !Ref mykey
+      AvailabilityZone: !Ref myaz
+      SecurityGroups:
+        - default
+        - !Ref customsecgroup
+  customsecgroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Allow port ssh connection"
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
