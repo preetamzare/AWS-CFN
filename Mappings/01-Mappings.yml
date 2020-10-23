@@ -1,0 +1,25 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: This is mapping section 101
+
+Parameters:
+  myKey:
+    Description: "Select the key"
+    Type: AWS::EC2::KeyPair::KeyName
+  
+Mappings:
+  OurRegion:
+    us-east-1:
+      HVM64: ami-0947d2ba12ee1ff75
+    us-east-2:
+      HVM64: ami-03657b56516ab7912
+
+Resources:
+  myFirstVM:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !FindInMap 
+        - OurRegion
+        - !Ref AWS::Region
+        - HVM64
+      InstanceType: t2.micro
+      KeyName: !Ref myKey
