@@ -1,0 +1,24 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Mapping with region and environment
+
+Parameters:
+  myKeyname:
+    Description: Enter the Key provided
+    Type: AWS::EC2::KeyPair::KeyName
+
+Mappings:
+  ourRegion:
+    us-east-1
+      HVM64:
+    us-east-2
+      HVM64:
+
+Resources:
+  myFirstInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !FindinMap
+        - ourRegion:
+        - !Ref AWS::Region
+        
+  
