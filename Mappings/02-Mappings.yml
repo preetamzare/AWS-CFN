@@ -2,23 +2,39 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: Mapping with region and environment
 
 Parameters:
-  myKeyname:
+  myKeyName:
     Description: Enter the Key provided
     Type: AWS::EC2::KeyPair::KeyName
+  envType:
+    Description: Is it dev or prod environment
+    Type: String
+    Default: Prod
+    AllowedValues:
+      - Dev
+      - Prod
 
 Mappings:
   ourRegion:
-    us-east-1
-      HVM64:
-    us-east-2
-      HVM64:
+    us-east-1:
+      HVM64: ami-0947d2ba12ee1ff75
+    us-east-2:
+      HVM64: ami-03657b56516ab7912
+  environment:
+    Prod:
+      type: t2.micro
+    Dev:
+      type: t2.small
 
 Resources:
   myFirstInstance:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: !FindinMap
-        - ourRegion:
+      ImageId: !FindInMap
+        - ourRegion
         - !Ref AWS::Region
-        
-  
+        - HVM64
+      InstanceType: !FindInMap 
+        - environment
+        - !Ref envType
+        - type
+      KeyName: !Ref myKeyName
