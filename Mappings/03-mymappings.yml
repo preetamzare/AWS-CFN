@@ -33,6 +33,9 @@ Resources:
       SecurityGroups:
         - default
         - !Ref customsecgroup
+      Tags:
+        - Key: Name
+          Value: !Ref Stages
   customsecgroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -42,6 +45,3 @@ Resources:
           FromPort: 22
           ToPort: 22
           CidrIp: 0.0.0.0/0
-      Tags:
-        - Key: Name
-          Value: !Ref Stages   
