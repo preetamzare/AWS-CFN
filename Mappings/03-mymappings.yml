@@ -1,0 +1,47 @@
+# here I added tags and referred it back using parameters
+AWSTemplateFormatVersion: 2010-09-09
+Description: my own example of mapping and using tags
+
+Parameters:
+  myKey:
+    Description: Select the key available in your AWS account
+    Type: AWS::EC2::KeyPair::KeyName
+  Stages:
+    Description: Select the stage of the VM
+    Type: String
+    Default: Prod
+    AllowedValues:
+      - Prod
+      - Dev
+Mappings:
+  Environment:
+    Prod:
+      Type: t2.small
+    Dev:
+      Type: t2.micro
+
+Resources:
+  MyFirstInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !FindInMap
+        - Environment
+        - !Ref Stages
+        - Type
+      ImageId: ami-0947d2ba12ee1ff75
+      KeyName: !Ref myKey
+      SecurityGroups:
+        - default
+        - !Ref customsecgroup
+  customsecgroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow SSH Access
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: !Ref Stages   
